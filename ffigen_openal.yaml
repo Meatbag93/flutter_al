@@ -1,0 +1,20 @@
+name: 'OpenALBindings'
+description: 'Bindings to OpenAL'
+output: 'lib/src/openal_generated_bindings.dart'
+preamble: |
+  // ignore_for_file: always_specify_types, unused_element, unused_field
+  // ignore_for_file: camel_case_types
+  // ignore_for_file: non_constant_identifier_names
+headers:
+  entry-points:
+    - 'AL/al.h'
+    - 'AL/alc.h'
+    - 'AL/alext.h'
+    - 'AL/efx.h'
+functions:
+  leaf:
+    include:
+      - '.*'
+  expose-typedefs:
+    include:
+      - '.*'
