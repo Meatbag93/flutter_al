@@ -12,7 +12,9 @@ import "./context.dart";
 final class Buffer extends Disposable {
   late final Context _context;
   late final Pointer<ALuint> _idPointer;
-  Buffer(this._context, this._idPointer);
+  Buffer(this._context, int id) {
+    _idPointer = calloc<ALuint>()..value = id;
+  }
   int get id => _idPointer.value;
 
   /// Sets the data of [this].

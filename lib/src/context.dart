@@ -4,6 +4,8 @@ import "./disposable.dart";
 import "./bindings.dart";
 import "./openal_generated_bindings.dart";
 import "./device.dart";
+import "./source.dart";
+import "./buffer.dart";
 
 /// A context
 final class Context extends Disposable {
@@ -32,6 +34,38 @@ final class Context extends Disposable {
     }
   }
 
+  /// Generates [count] buffers.
+  List<Buffer> generateBuffers(int count) {
+    if (count <= 0) return [];
+    List<Buffer> result = [];
+    Pointer<ALuint> ids = calloc<ALuint>(count);
+    try {
+      bindings.alGenBuffers(count, ids);
+      for (int i = 0; i < count; i++) {
+        result.add(Buffer(this, ids[i]));
+      }
+      return result;
+    } finally {
+      calloc.free(ids);
+    }
+  }
+
+  /// Generates [count] sources
+  List<Source> generateSources(int count) {
+    if (count <= 0) return [];
+    List<Source> result = [];
+    Pointer<ALuint> ids = calloc<ALuint>(count);
+    try {
+      bindings.alGenSources(count, ids);
+      for (int i = 0; i < count; i++) {
+        result.add(Source(this, ids[i]));
+      }
+      return result;
+    } finally {
+      calloc.free(ids);
+    }
+  }
+
   /// Sets [this] as the current context while [callback] is running.
   ///
   /// [callback] cannot be an async function.
@@ -46,7 +80,7 @@ final class Context extends Disposable {
     }
   }
 
-  Pointer<ALCcontext> get contexPointer {
+  Pointer<ALCcontext> get contextPointer {
     ensureNotDisposed();
     return _context;
   }

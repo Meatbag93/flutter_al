@@ -16,7 +16,9 @@ final class Source extends Disposable {
   late final Context _context;
   late final Pointer<ALuint> _idPointer;
   late final Map<int, Buffer> _queuedBuffers;
-  Source(this._context, this._idPointer) : _queuedBuffers = {};
+  Source(this._context, int id) : _queuedBuffers = {} {
+    _idPointer = calloc<ALuint>()..value = id;
+  }
   int get id => _idPointer.value;
   @pragma("vm:prefer-inline")
   int _getIntProperty(int property) => using<int>((allocate) {
