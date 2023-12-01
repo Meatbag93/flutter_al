@@ -1129,7 +1129,7 @@ endif()
 
 # Check for Oboe (Android) backend
 option(ALSOFT_BACKEND_OBOE "Enable Oboe backend" ON)
-option(ALSOFT_REQUIRE_OBOE "Require Oboe backend" ON)
+option(ALSOFT_REQUIRE_OBOE "Require Oboe backend" OFF)
 if(ALSOFT_BACKEND_OBOE)
     set(OBOE_TARGET )
     if(ANDROID)
