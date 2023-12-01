@@ -2,7 +2,6 @@
 
 cmake_minimum_required(VERSION 3.13)
 enable_testing()
-
 if(APPLE)
     # The workaround for try_compile failing with code signing
     # since cmake-3.18.2, not required
@@ -1130,11 +1129,11 @@ endif()
 
 # Check for Oboe (Android) backend
 option(ALSOFT_BACKEND_OBOE "Enable Oboe backend" ON)
-option(ALSOFT_REQUIRE_OBOE "Require Oboe backend" OFF)
+option(ALSOFT_REQUIRE_OBOE "Require Oboe backend" ON)
 if(ALSOFT_BACKEND_OBOE)
     set(OBOE_TARGET )
     if(ANDROID)
-        set(OBOE_SOURCE "" CACHE STRING "Source directory for Oboe.")
+        set(OBOE_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/oboe_src")
         if(OBOE_SOURCE)
             add_subdirectory(${OBOE_SOURCE} ./oboe)
             set(OBOE_TARGET oboe)

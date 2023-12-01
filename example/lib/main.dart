@@ -43,7 +43,7 @@ class _ExampleScreenState extends State<ExampleScreen> {
     ByteData pcmByteData = await rootBundle.load('assets/test.pcm');
     Uint8List pcmData = Uint8List.sublistView(pcmByteData);
     device = Device();
-    ctx = Context(device)..makeCurrent();
+    ctx = Context(device, attributes: {"hrtf_soft": 1})..makeCurrent();
     buffer = ctx.generateBuffers(1)[0];
     buffer.setData(pcmData, sampleRate: 44100, format: BufferFormat.stereo16);
     source = ctx.generateSources(1)[0];
