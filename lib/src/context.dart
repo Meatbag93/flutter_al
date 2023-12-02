@@ -11,11 +11,25 @@ import "./buffer.dart";
 final class Context extends Disposable {
   late final Device device;
   late final Pointer<ALCcontext> _context;
+  late Map<String, int> _attributes;
 
   /// Create a context from a device
   ///
   /// You can optionally pass in a map of attribute names to values
-  Context(this.device, {Map<String, int> attributes = const {}}) {
+  Context(this.device, {Map<String, int> attributes = const {}})
+      : _attributes = attributes {
+    Pointer<ALCint>? cAttributes = _makeContextAttributes(_attributes);
+    _context =
+        bindings.alcCreateContext(device.devicePointer, cAttributes ?? nullptr);
+    if (cAttributes != null) {
+      calloc.free(cAttributes);
+    }
+    if (_context == nullptr) {
+      throw StateError("Couldn't create Context");
+    }
+  }
+
+  Pointer<ALCint>? _makeContextAttributes(Map<String, int> attributes) {
     Pointer<ALCint>? cAttributes;
     if (attributes.isNotEmpty) {
       List<int> attributeList = _getAttributeList(device, attributes);
@@ -24,13 +38,18 @@ final class Context extends Disposable {
         cAttributes[i] = attributeList[i];
       }
     }
-    _context =
-        bindings.alcCreateContext(device.devicePointer, cAttributes ?? nullptr);
+    return cAttributes;
+  }
+
+  /// Resets the device associated with this context.
+  ///
+  /// if [attributes] is null, uses the same attributes as this context
+  void resetDevice({Map<String, int>? attributes}) {
+    _attributes = attributes ?? _attributes;
+    Pointer<ALCint>? cAttributes = _makeContextAttributes(_attributes);
+    bindings.alcResetDeviceSOFT(device.devicePointer, cAttributes ?? nullptr);
     if (cAttributes != null) {
       calloc.free(cAttributes);
-    }
-    if (_context == nullptr) {
-      throw StateError("Couldn't create Context");
     }
   }
 

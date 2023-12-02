@@ -112,6 +112,10 @@ class _ExampleScreenState extends State<ExampleScreen> {
                   tooltip: (isPlaying ? "Pause" : "Play"),
                 ),
                 IconButton(
+                    onPressed: ctx.resetDevice,
+                    tooltip: "Reset device",
+                    icon: const Icon(Icons.refresh)),
+                IconButton(
                   onPressed: toggleLooping,
                   icon: Icon(isLooping ? Icons.repeat : Icons.repeat_one),
                   tooltip: (isLooping ? "Disable looping" : "Enable looping"),
