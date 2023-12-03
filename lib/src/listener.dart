@@ -71,15 +71,22 @@ final class Listener {
     }
   }
 
+  /// X, Y, Z position
   static List<double> get position => _getVector3Property(AL_POSITION);
   static set position(List<double> value) =>
       _setVector3Property(AL_POSITION, value);
+
+  /// The velocity vector
   static List<double> get velocity => _getVector3Property(AL_VELOCITY);
   static set velocity(List<double> value) =>
       _setVector3Property(AL_VELOCITY, value);
+
+  /// Orientation expressed as "at" and "up" vectors, as a unidimentional list of 6 doubles.
   static List<double> get orientation => _getVector6Property(AL_ORIENTATION);
   static set orientation(List<double> value) =>
       _setVector6Property(AL_ORIENTATION, value);
+
+  /// Master gain. Value should be positive
   static double get gain => _getFloatProperty(AL_GAIN);
   static set gain(double value) => _setFloatProperty(AL_GAIN, value);
 }

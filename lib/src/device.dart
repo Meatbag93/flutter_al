@@ -23,6 +23,7 @@ final class Device extends Disposable {
     }
   }
 
+  /// Must not be used by users.
   Pointer<ALCdevice> get devicePointer {
     ensureNotDisposed();
     return _device;
@@ -37,8 +38,9 @@ final class Device extends Disposable {
         .toDartString();
   }
 
-  /// closes this device.
-  /// If the device contains any contexts or buffers, the operation will fail and a [StateError] will be thrown, and [this] will not be disposed
+  /// closes [this]] device.
+  ///
+  /// If [this] device contains any contexts or buffers, the operation will fail and a [StateError] will be thrown, and [this] will not be disposed
   @override
   void dispose() {
     ensureNotDisposed();

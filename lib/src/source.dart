@@ -100,7 +100,7 @@ final class Source extends Disposable {
     bindings.alSourcePause(id);
   }
 
-  /// The amount of buffers that have been processed
+  /// The amount of buffers in the queue that have been processed
   int get processedBuffers => _getIntProperty(AL_BUFFERS_PROCESSED);
 
   /// Queues a set of [Buffer]s on [this]. All [Buffer]s attached to [this] will be played in sequence, and the number of processed buffers can be detected using [processedBuffers].
@@ -152,42 +152,72 @@ final class Source extends Disposable {
   /// Whether the positions are relative to the listener. Defaults to false
   bool get relative => _getBoolProperty(AL_SOURCE_RELATIVE);
   set relative(bool value) => _setBoolProperty(AL_SOURCE_RELATIVE, value);
+
+  /// The gain when inside the oriented cone
   double get coneInnerAngle => _getFloatProperty(AL_CONE_INNER_ANGLE);
   set coneInnerAngle(double value) =>
       _setFloatProperty(AL_CONE_INNER_ANGLE, value);
+
+  /// Outer angle of the sound cone, in degrees. Default is 360
   double get coneOuterAngle => _getFloatProperty(AL_CONE_OUTER_ANGLE);
   set coneOuterAngle(double value) =>
       _setFloatProperty(AL_CONE_OUTER_ANGLE, value);
+
+  /// Pitch multiplier. Always positive
   double get pitch => _getFloatProperty(AL_PITCH);
   set pitch(double value) => _setFloatProperty(AL_PITCH, value);
+
+  /// X, Y, Z position
   List<double> get position => _getVector3Property(AL_POSITION);
   set position(List<double> value) => _setVector3Property(AL_POSITION, value);
+
+  /// The direction vector
   List<double> get direction => _getVector3Property(AL_DIRECTION);
   set direction(List<double> value) => _setVector3Property(AL_DIRECTION, value);
+
+  /// The Velocity vector.
   List<double> get velocity => _getVector3Property(AL_VELOCITY);
   set velocity(List<double> value) => _setVector3Property(AL_VELOCITY, value);
+
+  /// Whether [this] loops when it ends.
   bool get looping => _getBoolProperty(AL_LOOPING);
   set looping(bool value) => _setBoolProperty(AL_LOOPING, value);
+
+  /// Source gain. Value should be positive.
   double get gain => _getFloatProperty(AL_GAIN);
   set gain(double value) => _setFloatProperty(AL_GAIN, value);
+
+  /// The minimum gain for [this]
   double get minGain => _getFloatProperty(AL_MIN_GAIN);
   set minGain(double value) => _setFloatProperty(AL_MIN_GAIN, value);
+
+  /// The maximum gain for [this]
   double get maxGain => _getFloatProperty(AL_MAX_GAIN);
   set maxGain(double value) => _setFloatProperty(AL_MAX_GAIN, value);
+
+  /// The state of [this]. Whether it's played, paused, stopped, etc. Check [SourceState]
   int get state => _getIntProperty(AL_SOURCE_STATE);
+
+  /// The distance under which the volume for [this] would normally drop by half (before being influenced by [rolloffFactor] or [maxDistance])
   double get referenceDistance => _getFloatProperty(AL_REFERENCE_DISTANCE);
   set referenceDistance(double value) =>
       _setFloatProperty(AL_REFERENCE_DISTANCE, value);
+
+  /// The rolloff rate for [this]. Default is 1.0
   double get rolloffFactor => _getFloatProperty(AL_ROLLOFF_FACTOR);
   set rolloffFactor(double value) =>
       _setFloatProperty(AL_ROLLOFF_FACTOR, value);
+
+  /// The gain when outside the oriented cone
   double get coneOuterGain => _getFloatProperty(AL_CONE_OUTER_GAIN);
   set coneOuterGain(double value) =>
       _setFloatProperty(AL_CONE_OUTER_GAIN, value);
+
+  /// Used with the Inverse Clamped Distance Model to set the distance where there will no longer be any attenuation of [this]
   double get maxDistance => _getFloatProperty(AL_MAX_DISTANCE);
   set maxDistance(double value) => _setFloatProperty(AL_MAX_DISTANCE, value);
 
-  /// Destroys [this] source.
+  /// Destroys [this].
   @override
   void dispose() {
     super.dispose();
