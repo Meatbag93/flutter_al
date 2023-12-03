@@ -112,7 +112,7 @@ class _ExampleScreenState extends State<ExampleScreen> {
                   tooltip: (isPlaying ? "Pause" : "Play"),
                 ),
                 IconButton(
-                    onPressed: ctx.resetDevice,
+                    onPressed: () => ctx.resetDevice(),
                     tooltip: "Reset device",
                     icon: const Icon(Icons.refresh)),
                 IconButton(
