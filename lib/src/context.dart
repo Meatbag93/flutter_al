@@ -99,7 +99,7 @@ final class Context extends Disposable {
     }
   }
 
-  /// Must not be used by users.
+  /// @nodoc
   Pointer<ALCcontext> get contextPointer {
     ensureNotDisposed();
     return _context;

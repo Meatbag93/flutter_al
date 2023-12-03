@@ -12,13 +12,19 @@ import "./source_state.dart";
 ///
 /// The [Source] class manages the
 /// position, volume, and playback of audio in 3D space.
+///
+/// [Source] must not be instantiated directly. Instead see [Context.generateSources]
 final class Source extends Disposable {
   late final Context _context;
   late final Pointer<ALuint> _idPointer;
   late final Map<int, Buffer> _queuedBuffers;
+
+  /// @nodoc
   Source(this._context, int id) : _queuedBuffers = {} {
     _idPointer = calloc<ALuint>()..value = id;
   }
+
+  /// @nodoc
   int get id => _idPointer.value;
   @pragma("vm:prefer-inline")
   int _getIntProperty(int property) => using<int>((allocate) {
@@ -217,7 +223,6 @@ final class Source extends Disposable {
   double get maxDistance => _getFloatProperty(AL_MAX_DISTANCE);
   set maxDistance(double value) => _setFloatProperty(AL_MAX_DISTANCE, value);
 
-  /// Destroys [this].
   @override
   void dispose() {
     super.dispose();

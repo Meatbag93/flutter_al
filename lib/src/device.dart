@@ -38,7 +38,7 @@ final class Device extends Disposable {
         .toDartString();
   }
 
-  /// closes [this]] device.
+  /// closes [this] device.
   ///
   /// If [this] device contains any contexts or buffers, the operation will fail and a [StateError] will be thrown, and [this] will not be disposed
   @override

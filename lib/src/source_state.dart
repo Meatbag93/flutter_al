@@ -1,5 +1,7 @@
 import "./openal_generated_bindings.dart";
+import "./source.dart";
 
+/// A state of a [Source]
 abstract final class SourceState {
   /// The source is not playing, and it either not been played yet or it has been rewind, and in both cases the playback position is reset to 0.
   static const int initial = AL_INITIAL;

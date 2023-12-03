@@ -1,5 +1,7 @@
 import "./openal_generated_bindings.dart";
+import "./buffer.dart";
 
+/// The format of the audio data in a [Buffer]
 abstract final class BufferFormat {
   /// Mono, 8-bit PCM.
   static const int mono8 = AL_FORMAT_MONO8;

@@ -7,14 +7,18 @@ import "./openal_generated_bindings.dart";
 import "./context.dart";
 
 /// A buffer that holds audio data
+///
+/// [Buffer] must not be instantiated directly. Instead see [Context.generateBuffers].
 final class Buffer extends Disposable {
   late final Context _context;
   late final Pointer<ALuint> _idPointer;
 
-  /// This object should not be instantiated directly. Instead see [Context.generateBuffers]
+  /// @nodoc
   Buffer(this._context, int id) {
     _idPointer = calloc<ALuint>()..value = id;
   }
+
+  /// @nodoc
   int get id {
     ensureNotDisposed();
     return _idPointer.value;
@@ -41,6 +45,8 @@ final class Buffer extends Disposable {
         bindings.alGetBufferi(id, AL_SIZE, value);
         return value.value;
       });
+
+  /// The bit depth of [this]
   int get bits => using<int>((alocate) {
         ensureNotDisposed();
         Pointer<ALint> value = alocate<ALint>();
@@ -56,7 +62,7 @@ final class Buffer extends Disposable {
         return value.value;
       });
 
-  /// The sample data of the audio in [this]
+  /// The sample rate of the audio in [this]
   int get sampleRate => using<int>((alocate) {
         ensureNotDisposed();
         Pointer<ALint> value = alocate<ALint>();
@@ -64,7 +70,6 @@ final class Buffer extends Disposable {
         return value.value;
       });
 
-  /// Deletes [this]
   @override
   void dispose() {
     super.dispose();
