@@ -1,6 +1,7 @@
 import "dart:ffi";
 import "dart:typed_data";
 import "package:ffi/ffi.dart";
+import "./exceptions.dart";
 import "./disposable.dart";
 import "./bindings.dart";
 import "./openal_generated_bindings.dart";
@@ -35,6 +36,7 @@ final class Buffer extends Disposable {
       cData.asTypedList(data.length).setAll(0, data);
       bindings.alBufferData(
           id, format, cData.cast<Void>(), data.length, sampleRate);
+      checkAlError();
     });
   }
 
@@ -76,6 +78,7 @@ final class Buffer extends Disposable {
     try {
       _context.whileCurrent(() {
         bindings.alDeleteBuffers(1, _idPointer);
+        checkAlError();
       });
     } finally {
       calloc.free(_idPointer);

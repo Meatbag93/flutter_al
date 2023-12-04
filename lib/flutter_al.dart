@@ -7,3 +7,20 @@ export "src/source.dart" show Source;
 export "src/buffer_format.dart" show BufferFormat;
 export "src/source_state.dart" show SourceState;
 export "src/extensions.dart" show AtomicSourceOperations;
+export "src/exceptions.dart"
+    show
+        AlError,
+        AlcError,
+        DeviceNotFoundError,
+        FlutterALError,
+        InvalidAlEnumError,
+        InvalidAlValueError,
+        InvalidAlcEnumError,
+        InvalidAlcValueError,
+        InvalidContextError,
+        InvalidDeviceError,
+        InvalidNameError,
+        InvalidOperationError,
+        OutOfMemoryError,
+        UnknownAlError,
+        UnknownAlcError;

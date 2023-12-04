@@ -6,8 +6,9 @@ import "./openal_generated_bindings.dart";
 import "./device.dart";
 import "./source.dart";
 import "./buffer.dart";
+import "./exceptions.dart";
 
-/// A context
+/// The OpenAL audio context.
 final class Context extends Disposable {
   late final Device device;
   late final Pointer<ALCcontext> _context;
@@ -19,13 +20,18 @@ final class Context extends Disposable {
   Context(this.device, {Map<String, int> attributes = const {}})
       : _attributes = attributes {
     Pointer<ALCint>? cAttributes = _makeContextAttributes(_attributes);
-    _context =
-        bindings.alcCreateContext(device.devicePointer, cAttributes ?? nullptr);
-    if (cAttributes != null) {
-      calloc.free(cAttributes);
-    }
-    if (_context == nullptr) {
-      throw StateError("Couldn't create Context");
+    try {
+      _context = bindings.alcCreateContext(
+          device.devicePointer, cAttributes ?? nullptr);
+      checkAlcError(device);
+      if (_context == nullptr) {
+        throw StateError(
+            "Couldn't create Context and unexpectedly, no error was returned.");
+      }
+    } finally {
+      if (cAttributes != null) {
+        calloc.free(cAttributes);
+      }
     }
   }
 
@@ -47,9 +53,13 @@ final class Context extends Disposable {
   void resetDevice({Map<String, int>? attributes}) {
     _attributes = attributes ?? _attributes;
     Pointer<ALCint>? cAttributes = _makeContextAttributes(_attributes);
-    bindings.alcResetDeviceSOFT(device.devicePointer, cAttributes ?? nullptr);
-    if (cAttributes != null) {
-      calloc.free(cAttributes);
+    try {
+      bindings.alcResetDeviceSOFT(device.devicePointer, cAttributes ?? nullptr);
+      checkAlcError(device);
+    } finally {
+      if (cAttributes != null) {
+        calloc.free(cAttributes);
+      }
     }
   }
 
@@ -60,6 +70,7 @@ final class Context extends Disposable {
     Pointer<ALuint> ids = calloc<ALuint>(count);
     try {
       bindings.alGenBuffers(count, ids);
+      checkAlError();
       for (int i = 0; i < count; i++) {
         result.add(Buffer(this, ids[i]));
       }
@@ -76,6 +87,7 @@ final class Context extends Disposable {
     Pointer<ALuint> ids = calloc<ALuint>(count);
     try {
       bindings.alGenSources(count, ids);
+      checkAlError();
       for (int i = 0; i < count; i++) {
         result.add(Source(this, ids[i]));
       }
@@ -96,6 +108,7 @@ final class Context extends Disposable {
       callback();
     } finally {
       bindings.alcMakeContextCurrent(previousContext);
+      checkAlcError(device);
     }
   }
 
@@ -106,13 +119,11 @@ final class Context extends Disposable {
   }
 
   /// make [this] the current context
-  ///
-  /// Will throw [StateError] if the operation fails
   void makeCurrent() {
     ensureNotDisposed();
     int result = bindings.alcMakeContextCurrent(_context);
     if (result == ALC_FALSE) {
-      throw StateError("Couldn't make context current");
+      checkAlcError(device);
     }
   }
 
@@ -128,6 +139,7 @@ final class Context extends Disposable {
       bindings.alcMakeContextCurrent(nullptr);
     }
     bindings.alcDestroyContext(_context);
+    checkAlcError(device);
   }
 
   /// Whether [this] is the current context

@@ -4,6 +4,7 @@ import "./disposable.dart";
 import "./bindings.dart";
 import "./openal_generated_bindings.dart";
 import "./utils.dart";
+import "./exceptions.dart";
 
 /// An output device
 final class Device extends Disposable {
@@ -16,14 +17,17 @@ final class Device extends Disposable {
     Pointer<Char> cName =
         (name.isNotEmpty ? name.toNativeUtf8(allocator: malloc) : nullptr)
             .cast<Char>();
-    _device = bindings.alcOpenDevice(cName);
-    if (name.isNotEmpty) malloc.free(cName);
-    if (_device == nullptr) {
-      throw StateError("Could not open device");
+    try {
+      _device = bindings.alcOpenDevice(cName);
+      if (_device == nullptr) {
+        throw DeviceNotFoundError(deviceName: name);
+      }
+    } finally {
+      if (name.isNotEmpty) malloc.free(cName);
     }
   }
 
-  /// Must not be used by users.
+  /// @nodoc
   Pointer<ALCdevice> get devicePointer {
     ensureNotDisposed();
     return _device;
@@ -40,14 +44,15 @@ final class Device extends Disposable {
 
   /// closes [this] device.
   ///
-  /// If [this] device contains any contexts or buffers, the operation will fail and a [StateError] will be thrown, and [this] will not be disposed
+  /// If [this] device contains any contexts or buffers, the operation will fail and [this] will not be disposed
   @override
   void dispose() {
     ensureNotDisposed();
     int result = bindings.alcCloseDevice(_device);
+    checkAlcError(this);
     if (result == AL_FALSE) {
       throw StateError(
-          "Failed to close device. Make sure that the device does not contain any contexts or buffers.");
+          "This device contains buffers and/or sources and cannot be disposed"); // in case no error was generated.
     } else {
       super.dispose();
     }

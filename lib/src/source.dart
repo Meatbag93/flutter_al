@@ -7,6 +7,7 @@ import "./openal_generated_bindings.dart";
 import "./context.dart";
 import "./buffer.dart";
 import "./source_state.dart";
+import "./exceptions.dart";
 
 /// Represents an OpenAL source.
 ///
@@ -82,6 +83,7 @@ final class Source extends Disposable {
   void play() {
     ensureNotDisposed();
     bindings.alSourcePlay(id);
+    checkAlError();
   }
 
   /// Stops [this].
@@ -90,12 +92,14 @@ final class Source extends Disposable {
   void stop() {
     ensureNotDisposed();
     bindings.alSourceStop(id);
+    checkAlError();
   }
 
   /// Stops [this] and sets state to [SourceState.initial].
   void rewind() {
     ensureNotDisposed();
     bindings.alSourceRewind(id);
+    checkAlError();
   }
 
   /// Pauses [this]
@@ -104,6 +108,7 @@ final class Source extends Disposable {
   void pause() {
     ensureNotDisposed();
     bindings.alSourcePause(id);
+    checkAlError();
   }
 
   /// The amount of buffers in the queue that have been processed
@@ -122,6 +127,7 @@ final class Source extends Disposable {
         cBuffers[i] = buffers[i].id;
       }
       bindings.alSourceQueueBuffers(id, length, cBuffers);
+      checkAlError();
       for (Buffer buffer in buffers) {
         _queuedBuffers[buffer.id] = buffer;
       }
@@ -143,6 +149,7 @@ final class Source extends Disposable {
       using<void>((alocate) {
         Pointer<ALuint> cUnqueuedBuffers = alocate<ALuint>(length);
         bindings.alSourceUnqueueBuffers(id, length, cUnqueuedBuffers);
+        checkAlError();
         for (int i = 0; i < length; i++) {
           int id = cUnqueuedBuffers[i];
           Buffer? buffer = _queuedBuffers.remove(id);
@@ -229,6 +236,7 @@ final class Source extends Disposable {
     try {
       _context.whileCurrent(() {
         bindings.alDeleteSources(1, _idPointer);
+        checkAlError();
       });
     } finally {
       calloc.free(_idPointer);

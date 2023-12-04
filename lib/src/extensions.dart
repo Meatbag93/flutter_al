@@ -3,6 +3,7 @@ import "package:ffi/ffi.dart";
 import "./bindings.dart";
 import "./openal_generated_bindings.dart";
 import "./source.dart";
+import "./exceptions.dart";
 
 /// performs atomic source operations on lists of sources.
 extension AtomicSourceOperations on List<Source> {
@@ -16,6 +17,7 @@ extension AtomicSourceOperations on List<Source> {
           ids[i] = src.id;
         }
         bindings.alSourcePlayv(length, ids);
+        checkAlError();
       });
 
   /// Stops all sources atomicly
@@ -28,6 +30,7 @@ extension AtomicSourceOperations on List<Source> {
           ids[i] = src.id;
         }
         bindings.alSourceStopv(length, ids);
+        checkAlError();
       });
 
   /// Pauses all sources atomicly.
@@ -40,5 +43,6 @@ extension AtomicSourceOperations on List<Source> {
           ids[i] = src.id;
         }
         bindings.alSourcePausev(length, ids);
+        checkAlError();
       });
 }
