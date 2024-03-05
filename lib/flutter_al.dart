@@ -1,5 +1,6 @@
 library;
 
+export "src/source_spacialize.dart" show SourceSpatialize;
 export "src/device.dart" show Device;
 export "src/context.dart" show Context;
 export "src/buffer.dart" show Buffer;

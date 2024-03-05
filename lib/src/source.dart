@@ -1,6 +1,7 @@
 import "dart:ffi";
 import "dart:math";
 import "package:ffi/ffi.dart";
+import "package:flutter_al/src/source_spacialize.dart";
 import "./disposable.dart";
 import "./bindings.dart";
 import "./openal_generated_bindings.dart";
@@ -219,6 +220,11 @@ final class Source extends Disposable {
 
   /// The state of [this]. Whether it's played, paused, stopped, etc. Check [SourceState]
   int get state => _getIntProperty(AL_SOURCE_STATE);
+
+  /// See [SourceSpatialize]. You should only set this to one of the constants in [SourceSpatialize]
+  int get spatialize => _getIntProperty(AL_SOURCE_SPATIALIZE_SOFT);
+  set spatialize(int value) =>
+      _setIntProperty(AL_SOURCE_SPATIALIZE_SOFT, value);
 
   /// The distance under which the volume for [this] would normally drop by half (before being influenced by [rolloffFactor] or [maxDistance])
   double get referenceDistance => _getFloatProperty(AL_REFERENCE_DISTANCE);
