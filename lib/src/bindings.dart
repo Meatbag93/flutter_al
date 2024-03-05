@@ -7,7 +7,7 @@ const String _libName = 'openal';
 /// The dynamic library in which the symbols for [OpenALBindings ] can be found.
 final DynamicLibrary _dylib = () {
   if (Platform.isMacOS || Platform.isIOS) {
-    return DynamicLibrary.open('$_libName.framework/$_libName');
+    return DynamicLibrary.open('soft_oal.framework/soft_oal');
   }
   if (Platform.isAndroid || Platform.isLinux) {
     return DynamicLibrary.open('lib$_libName.so');
