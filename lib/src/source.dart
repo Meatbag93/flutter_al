@@ -166,6 +166,15 @@ final class Source extends Disposable {
   bool get relative => _getBoolProperty(AL_SOURCE_RELATIVE);
   set relative(bool value) => _setBoolProperty(AL_SOURCE_RELATIVE, value);
 
+  /// If true, the audio channels are not virtualized and play
+  /// directly on the matching output channels if they exist, otherwise they are
+  /// remixed to the closest available channels. Applies only when playing non-
+  /// mono and non-B-Format buffers.
+  ///
+  /// Defaults to false.
+  bool get direct => _getBoolProperty(AL_DIRECT_CHANNELS_SOFT);
+  set direct(bool value) => _setBoolProperty(AL_DIRECT_CHANNELS_SOFT, value);
+
   /// The gain when inside the oriented cone
   double get coneInnerAngle => _getFloatProperty(AL_CONE_INNER_ANGLE);
   set coneInnerAngle(double value) =>

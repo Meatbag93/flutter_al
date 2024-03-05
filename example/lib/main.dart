@@ -31,6 +31,7 @@ class _ExampleScreenState extends State<ExampleScreen> {
   late Source source;
   bool isPlaying = false;
   bool isLooping = false;
+  bool isDirect = true;
   double gainValue = 0.5;
 
   @override
@@ -50,6 +51,7 @@ class _ExampleScreenState extends State<ExampleScreen> {
     source.queueBuffers([buffer]);
     source.looping = isLooping;
     source.gain = gainValue;
+    source.direct = true;
   }
 
   @override
@@ -69,6 +71,13 @@ class _ExampleScreenState extends State<ExampleScreen> {
     }
     setState(() {
       isPlaying = !isPlaying;
+    });
+  }
+
+  void toggleDirect() {
+    setState(() {
+      isDirect = !isDirect;
+      source.direct = isDirect;
     });
   }
 
@@ -111,6 +120,12 @@ class _ExampleScreenState extends State<ExampleScreen> {
                   icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
                   tooltip: (isPlaying ? "Pause" : "Play"),
                 ),
+                IconButton(
+                    onPressed: toggleDirect,
+                    icon: Icon(isDirect
+                        ? Icons.check_box
+                        : Icons.check_box_outline_blank),
+                    tooltip: isDirect ? "Disable direct" : "Enable direct"),
                 IconButton(
                     onPressed: () => ctx.resetDevice(),
                     tooltip: "Reset device",
