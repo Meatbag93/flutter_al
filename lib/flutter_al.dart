@@ -8,6 +8,7 @@ export "src/source.dart" show Source;
 export "src/buffer_format.dart" show BufferFormat;
 export "src/source_state.dart" show SourceState;
 export "src/extensions.dart" show AtomicSourceOperations;
+export "src/capture_device.dart" show CaptureDevice;
 export "src/exceptions.dart"
     show
         AlError,
